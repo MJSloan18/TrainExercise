@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<html lang="en-us">
+<meta charset="UTF-8">
+
+
+<head>
+    <link rel="stylesheet" href="trainstyle.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!--Bootstrap-->
+    <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+    <!--JQuery-->
+
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="jumbotron">
+                    <h2>The Midnight Train To Georgia</h2>
+                    <h5>Going anywhere you'd rather be.</h5>
+                </div>
+                <!--Jumbotron-->
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h4>Current Train Schedule</h4>
+                    </div>
+
+                    <table class="trainTable" style="width:100%">
+
+                        <tr>
+                            <th id="train-display"> Train Name:</th>
+                            <th id="dest-display"> Destination:</th>
+                            <th id="freq-display"> Frequency (min.):</th>
+                            <th id="arr-display"> Next Arrival:</th>
+                            <th id="min-display"> Minutes Away:</th>
+
+                        </tr>
+
+                    </table>
+
+                </div>
+                <!--Panel default-->
+            </div>
+            <!--column-->
+        </div>
+        <!--row-->
+    </div>
+    <!--container-->
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h4>Add Train</h4>
+                    </div>
+                    <form id="addEmployee">
+                        <p><span id="span1">Train Name: </span></p>
+                        <p><input id="ip1" id="to-do" type="text1" size="100"></p>
+                        <p><span id="span2">Destination: </span></p>
+                        <p><input id="ip2" id="to-do" type="text" size="100"></p>
+                        <p><span id="span3">First Train Time (HH:mm Military Time) : </span></p>
+                        <p><input id="ip3" id="to-do" type="text" size="100"></p>
+                        <p><span id="span4">Frequency (min.): </span></p>
+                        <p><input id="ip4" id="to-do" type="text" size="100"></p>
+                        <p><input id="ip5" value="Submit" type="submit"></p>
+                    </form>
+                </div>
+                <!--Panel default-->
+            </div>
+            <!--column-->
+        </div>
+        <!--row-->
+    </div>
+    <!--container-->
+
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyDyKCLqoo7RGrIb3b2D939sTJg_iRyGovA",
+            authDomain: "train-homework-b290f.firebaseapp.com",
+            databaseURL: "https://train-homework-b290f.firebaseio.com",
+            projectId: "train-homework-b290f",
+            storageBucket: "",
+            messagingSenderId: "18067036217s8"
+        };
+        firebase.initializeApp(config);
+
+        var database = firebase.database();
+
+        var train = "";
+        var destination = "";
+        var firstTrain = "";
+        var frequency = "";
+        var minAway =
+
+            $("#ip5").on("click", function(event) {
+                event.preventDefault();
+
+                train = $("#ip1").val().trim();
+                destination = $("#ip2").val().trim();
+                firstTrain = $("#ip3").val().trim();
+                frequency = $("#ip4").val().trim();
+
+                database.ref().set({
+                    train: train,
+                    destination: destination,
+                    firstTrain: firstTrain,
+                    frequency: frequency
+                    // dateAdded: firebase.database.ServerValue.TIMESTAMP
+                });
+
+            });
+
+        database.ref().on("value", function(snapshot) {
+            // console.log(snapshot.val());
+            console.log(snapshot.val().train);
+            console.log(snapshot.val().destination);
+            console.log(snapshot.val().firstTrain);
+            console.log(snapshot.val().frequency);
+
+            $("#train-display").append("<h5>" + snapshot.val().train);
+            $("#dest-display").append("<h5>" + snapshot.val().destination);
+            $("#arr-display").append("<h5>" + snapshot.val().firstTrain);
+            $("#freq-display").append("<h5>" + snapshot.val().frequency);
+            $("#min-display").append("<h5>" + snapshot.val().minAway);
+
+
+
+        }, function(errorObject) {
+            console.log("Errors handled: " + errorObject.code);
+        });
+    </script>
+
+</body>
+
+</html>
